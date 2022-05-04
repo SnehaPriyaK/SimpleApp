@@ -1,6 +1,10 @@
 const express = require("express");
+const bodyparser = require('body-parser');
 var mysql = require('mysql');
 const app = express();
+
+app.use(bodyparser.urlencoded({extended:false}))
+app.use(bodyparser.json());
 
 var db = mysql.createConnection({
     host:"localhost",
@@ -26,9 +30,9 @@ db.connect(function(err) {
       })
     }
 });
-console.log("!!!!!!!!!!!!!!!!!");
+
 app.get("/api", (req, res) => {
-    db.query("SELECT * FROM registeredusers", (err,result)=>{
+    db.query("SELECT * FROM resgisteredUser", (err,result)=>{
       if(err){
         console.log(err)
       }
@@ -40,14 +44,24 @@ app.get("/api", (req, res) => {
         res.send(result);
       }
     })
-  //   console.log("HIIIIIIIIIIIIIIIIIIIIIIIII")
-  //   res.json({ 
-  //     data: "Hello from server!1111111111111",
-  //  });
   });
 
-app.post("/api/sign-in",(req,res)=> {
-    console.log("1111111111",req);
+app.post("/api/sign-in",(request,res)=> {
+    console.log("1111111111",request.body.resgisteredUser.email);
+    const user =request.body.resgisteredUser;
+    //db.query("INSERT INTO resgisteredUser VALUES()")
+    db.query(
+      "INSERT INTO resgisteredUser (firstName, lastName, mobileNo, emailID, password) VALUES (?,?,?,?,?)",
+      [user.fname, user.lname, user.mobileno, user.email, user.pswd],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send("Values Inserted");
+        }
+      }
+    );
+    //res.send(request);
 })
 
   

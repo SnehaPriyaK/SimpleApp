@@ -28,27 +28,21 @@ class SignUp extends Component {
     submitForm(e) {
         e.preventDefault();
         if (this.validateForm()) {
-            let fields = {};
-            var resgisteredUser = JSON.parse(localStorage.getItem("resgisteredUser")) || []
-            var resgistered={
-              email:this.state.fields.email,
-              password:this.state.fields.pswd,
-            }
-            resgisteredUser.push(resgistered)
-            localStorage.setItem("resgisteredUser",JSON.stringify(resgisteredUser));
-            console.log("@@@@@@@@@@@",resgisteredUser,axios)
-            
+            let fields = {};            
             axios
               .post("/api/sign-in",{resgisteredUser:this.state.fields})
               .then(response =>{
                 console.log("response from node",response);
+                fields["fname"] = "";
+                fields["lname"] = "";
+                fields["mobileno"] =  "";
+                fields["email"] = "";
+                fields["pswd"] = "";
+                this.setState({fields:fields});
+                alert("Form submitted");
+                this.props.history.push('sign-in');
               })
-            fields["lname"] = "";
-            fields["email"] = "";
-            fields["pswd"] = "";
-            this.setState({fields:fields});
-            alert("Form submitted");
-            this.props.history.push('sign-in');
+              .catch(error => console.log(error));            
         }
   
     }
