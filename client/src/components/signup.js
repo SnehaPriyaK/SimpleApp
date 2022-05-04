@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
+import axios from 'axios';
 import '../App.css'
 
 class SignUp extends Component {
@@ -28,15 +29,26 @@ class SignUp extends Component {
         e.preventDefault();
         if (this.validateForm()) {
             let fields = {};
-            localStorage.setItem('email', this.state.fields.email);
-            localStorage.setItem('pswd', this.state.fields.pswd);
-            fields["fname"] = "";
+            var resgisteredUser = JSON.parse(localStorage.getItem("resgisteredUser")) || []
+            var resgistered={
+              email:this.state.fields.email,
+              password:this.state.fields.pswd,
+            }
+            resgisteredUser.push(resgistered)
+            localStorage.setItem("resgisteredUser",JSON.stringify(resgisteredUser));
+            console.log("@@@@@@@@@@@",resgisteredUser,axios)
+            
+            axios
+              .post("/api/sign-in",{resgisteredUser:this.state.fields})
+              .then(response =>{
+                console.log("response from node",response);
+              })
             fields["lname"] = "";
             fields["email"] = "";
             fields["pswd"] = "";
             this.setState({fields:fields});
             alert("Form submitted");
-            this.props.history.push('sign-in')
+            this.props.history.push('sign-in');
         }
   
     }
@@ -116,15 +128,21 @@ class SignUp extends Component {
 
 
     render() {
+      // axios
+      // .post("/api/sign-in",{resgisteredUser:this.state.fields})
+      // .then(response =>{
+      //   console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!###################",response.data)
+      //   return response.data;
+      // });
         return (
             <form>
                 <h3>Sign Up</h3>
 
                 <div className="form-group">
                     <label>First name</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="far fa-user"></i></span>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                      <span className="input-group-text"><i className="far fa-user"></i></span>
                       </div>
                       <input type="text" name="fname" value={this.state.fields.fname} onChange={this.handleChange} className="form-control" placeholder="First name" />                    
                     </div>
@@ -133,9 +151,9 @@ class SignUp extends Component {
 
                 <div className="form-group">
                     <label>Last name</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="far fa-user"></i></span>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                      <span className="input-group-text"><i className="far fa-user"></i></span>
                       </div>
                       <input type="text" name="lname" value={this.state.fields.lname} onChange={this.handleChange} className="form-control" placeholder="Last name" />                    
                     </div>
@@ -144,9 +162,9 @@ class SignUp extends Component {
 
                 <div className="form-group">
                     <label>Mobile Number</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="far fa-address-book"></i></span>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                      <span className="input-group-text"><i className="far fa-address-book"></i></span>
                       </div>
                       <input type="text" name="mobileno" value={this.state.fields.mobileno} onChange={this.handleChange} className="form-control" placeholder="Enter mobile Nubmer" />                    
                     </div>
@@ -155,9 +173,9 @@ class SignUp extends Component {
 
                 <div className="form-group">
                     <label>Email address</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <span className="input-group-text"><i className="fas fa-envelope"></i></span>
                       </div>
                       <input type="email" name="email" value={this.state.fields.email} onChange={this.handleChange} className="form-control" placeholder="Enter email"/>
                     </div>
@@ -166,13 +184,13 @@ class SignUp extends Component {
 
                 <div className="form-group">
                     <label>Password</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-key"></i></span>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                      <span className="input-group-text"><i className="fas fa-key"></i></span>
                       </div>
                       <input type={this.state.pswdVisibility===true?'text':'password'} name="pswd" style={{borderRight:'none'}} value={this.state.fields.pswd} onChange={this.handleChange} className="form-control" placeholder="Enter password" />
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" style={{backgroundColor:"white", borderLeft:'none'}}><i class={this.state.pswdVisibility===true?'far fa-eye':'far fa-eye-slash'} onClick={()=>this.setState({pswdVisibility:!this.state.pswdVisibility})}></i></span>
+                      <div className="input-group-prepend">
+                        <span className="input-group-text" style={{backgroundColor:"white", borderLeft:'none'}}><i className={this.state.pswdVisibility===true?'far fa-eye':'far fa-eye-slash'} onClick={()=>this.setState({pswdVisibility:!this.state.pswdVisibility})}></i></span>
                       </div>                                    
                     </div>
                     <div className="errorMsg">{this.state.errors.pswd}</div>

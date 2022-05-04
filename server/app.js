@@ -1,41 +1,56 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require("express");
+var mysql = require('mysql');
+const app = express();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+var db = mysql.createConnection({
+    host:"localhost",
+    user:"root",
+    password:"Omega@2021$",
+    database : "userdata"
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+//Connecting to database
+db.connect(function(err) {
+    if(err){
+      console.log("Error in the connection")
+      console.log(err)
+    }
+    else{
+      console.log(`Database Connected`)
+      db.query(`SHOW DATABASES`, 
+      function (err, result) {
+        if(err)
+          console.log(`Error executing the query - ${err}`)
+        else
+          console.log("Result: ",result) 
+      })
+    }
 });
+console.log("!!!!!!!!!!!!!!!!!");
+app.get("/api", (req, res) => {
+    db.query("SELECT * FROM registeredusers", (err,result)=>{
+      if(err){
+        console.log(err)
+      }
+      else{
+        console.log("#########",result)
+        result.forEach(element => {
+          console.log("33333333333",element.id)
+        });
+        res.send(result);
+      }
+    })
+  //   console.log("HIIIIIIIIIIIIIIIIIIIIIIIII")
+  //   res.json({ 
+  //     data: "Hello from server!1111111111111",
+  //  });
+  });
 
-module.exports = app;
+app.post("/api/sign-in",(req,res)=> {
+    console.log("1111111111",req);
+})
+
+  
+const PORT = process.env.PORT || 8080;
+  
+app.listen(PORT, console.log(`Server started on port ${PORT}`));

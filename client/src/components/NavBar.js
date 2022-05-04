@@ -24,15 +24,12 @@ class NavBar extends Component {
     render(){
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         console.log("first",isLoggedIn);
-        //console.log(this.props.loggedIn,this.loggedIn,this.props.loggedIn=='true')
         return(
             <div> 
                         <Navbar bg="light" variant="light">
                         <Container>
-                        <Navbar.Brand href="#home"><i class="fas fa-feather-alt"> My Web Page</i></Navbar.Brand>
+                        <Navbar.Brand href="#home"><i className="fas fa-feather-alt"> My Web Page</i></Navbar.Brand>
                         <Nav className="me-auto">
-                        {/* <Nav.Link href="./sign-in">Login</Nav.Link>
-                        <Nav.Link href="./sign-up">SignUp</Nav.Link> */}
                             {(isLoggedIn=='true') ?
                             
                                 <Nav.Link className='nav-link' href="/sign-in" onClick={setValue} >
@@ -57,62 +54,7 @@ class NavBar extends Component {
                         </Container>
                     </Navbar>
                     
-                {/* <Nav.Link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'/>
-                <Navbar color="faded" light expand="md">
-                    <Link className='navbar-brand' exact to='/'>
-                        <img src={logo} alt='Brand' width='35px' height='35px'/>
-                    </Link>
-                    <Navbar.Toggle onClick={this.toggle} />
-                    <Navbar.Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="mr-auto" navbar>
-                            <NavItem>
-                                <Link className='nav-link' exact to='/categories'>
-                                    Categories
-                                </Link>
-                            </NavItem>
-                        </Nav>
-                        <Nav className='mx-auto' navbar>
-                            <Form inline>
-                                <FormGroup>
-                                    <Input size='sm' type="text" name="search" placeholder="Search" />
-                                </FormGroup>
-                                <Button size='sm'><i className='fa fa-search'></i></Button>
-                            </Form>
-                        </Nav>
-                        <Nav className="ml-auto" navbar>
-
-                            <NavItem>
-                                <Link className='nav-link' exact to='/cart'>
-                                    <i className='fa fa-shopping-cart'></i>
-                                </Link>
-                            </NavItem>
-
-                            {(this.loggedIn) ?
-                            <NavItem>
-                                <Link className='nav-link' exact to='/profile'>
-                                    <i className='fa fa-user'></i> 
-                                </Link>
-                            </NavItem>
-                            : null }
-
-                            {(this.loggedIn) ?
-
-                            <NavItem>
-                                <Link className='nav-link' exact to='/logout'>
-                                    <i className='fa fa-sign-out'></i>
-                                </Link>
-                            </NavItem>
-                            : 
-                            <NavItem>
-                                <Link className='nav-link' exact to='/login'>
-                                    <i className='fa fa-sign-in'></i>
-                                </Link>
-                            </NavItem>
-                            }
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar> */}
-            </div>
+                </div>
         );
     }
 }

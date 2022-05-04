@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { Component } from "react";
 import '../App.css'
 
@@ -26,22 +27,54 @@ export default class Login extends Component {
 
     submitForm(e) {        
         e.preventDefault();
-        const email = localStorage.getItem('email');
-        const password = localStorage.getItem('pswd');
-        console.log("submit called",email,password)
+        const resgisteredUser = JSON.parse(localStorage.getItem('resgisteredUser'));       
+        console.log("submit called",resgisteredUser)
         if (this.validateForm()) {
+          console.log("erererererre")
+          axios
+          .get("/api")
+          .then((res)=> {
+            console.log("@#@@@@@@@@@@@@@#######",res.data);
+            let resgisteredUser=res.data;
+            let isRegisteredUser = false;
             let fields = {};
             fields["email"] = "";
             fields["pswd"] = "";
-            if(email === this.state.fields.email && password === this.state.fields.pswd){
-                this.setState({fields:fields});
-                localStorage.setItem('isLoggedIn', true);
-               // alert("Login successful");
-                this.props.history.push('/home');
-            }
-            else{
-                alert("Login failed");
-            }
+            resgisteredUser.forEach(user => {
+                  console.log("1111",user.emailID,user.password);
+                  if(user.emailID === this.state.fields.email && user.password === this.state.fields.pswd){
+                    isRegisteredUser=true;
+                  }                  
+                });
+                if(isRegisteredUser===true){
+                  this.setState({fields:fields});
+                  localStorage.setItem('isLoggedIn', true);
+                 alert("Login successful");
+                  this.props.history.push('/home');
+              }
+              else{
+                  alert("Invalid Username / password");
+              }        
+          })
+          //   let fields = {};
+          //   fields["email"] = "";
+          //   fields["pswd"] = "";
+          //   let isRegisteredUser = false;
+          //   resgisteredUser.forEach(user => {
+          //     console.log("1111",user.email,user.password);
+          //     if(user.email === this.state.fields.email && user.password === this.state.fields.pswd){
+          //       isRegisteredUser=true;
+          //     }                  
+          //   });
+          //   if(isRegisteredUser===true){
+          //     this.setState({fields:fields});
+          //     localStorage.setItem('isLoggedIn', true);
+          //    alert("Login successful");
+          //     this.props.history.push('/home');
+          // }
+          // else{
+          //     alert("Invalid Username / password");
+          // }                 
         }
   
     }
@@ -79,14 +112,14 @@ export default class Login extends Component {
 
     render() {
         return (
-            <form>
+            <form >
                 <h3>Sign In</h3>
 
                 <div className="form-group">
                     <label>Email address</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <span className="input-group-text"><i className="fas fa-envelope"></i></span>
                       </div>
                       <input type="email" name="email" value={this.state.fields.email} onChange={this.handleChange} className="form-control" placeholder="Enter email"/>
                     </div>
@@ -95,13 +128,13 @@ export default class Login extends Component {
 
                 <div className="form-group">
                     <label>Password</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-key"></i></span>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                      <span className="input-group-text"><i className="fas fa-key"></i></span>
                       </div>
                       <input type={this.state.pswdVisibility===true?'text':'password'} name="pswd" style={{borderRight:'none'}} value={this.state.fields.pswd} onChange={this.handleChange} className="form-control" placeholder="Enter password" />
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" style={{backgroundColor:"white", borderLeft:'none'}}><i class={this.state.pswdVisibility===true?'far fa-eye':'far fa-eye-slash'} onClick={()=>this.setState({pswdVisibility:!this.state.pswdVisibility})}></i></span>
+                      <div className="input-group-prepend">
+                        <span className="input-group-text" style={{backgroundColor:"white", borderLeft:'none'}}><i className={this.state.pswdVisibility===true?'far fa-eye':'far fa-eye-slash'} onClick={()=>this.setState({pswdVisibility:!this.state.pswdVisibility})}></i></span>
                       </div>                                    
                     </div>
                     <div className="errorMsg">{this.state.errors.pswd}</div>
@@ -118,7 +151,6 @@ export default class Login extends Component {
                 <p className="forgot-password text-right">
                     Forgot <a href="/pswdreset">password?</a>
                 </p>
-                
             </form>
         );
     }
