@@ -30,7 +30,7 @@ class NavBar extends Component {
                         <Container>
                         <Navbar.Brand href="#home"><i className="fas fa-feather-alt"> My Web Page</i></Navbar.Brand>
                         <Nav className="me-auto">
-                            {(isLoggedIn=='true') ?
+                            {(isLoggedIn==='true') ?
                             
                                 <Nav.Link className='nav-link' href="/sign-in" onClick={setValue} >
                                     <i className='fas fa-sign-out-alt'>Logout</i> 

@@ -32,14 +32,14 @@ db.connect(function(err) {
 });
 
 app.get("/api", (req, res) => {
-    db.query("SELECT * FROM resgisteredUser", (err,result)=>{
+    db.query("SELECT * FROM registeredusers", (err,result)=>{
       if(err){
         console.log(err)
       }
       else{
         console.log("#########",result)
         result.forEach(element => {
-          console.log("33333333333",element.id)
+          console.log("33333333333",element)
         });
         res.send(result);
       }
@@ -51,7 +51,7 @@ app.post("/api/sign-in",(request,res)=> {
     const user =request.body.resgisteredUser;
     //db.query("INSERT INTO resgisteredUser VALUES()")
     db.query(
-      "INSERT INTO resgisteredUser (firstName, lastName, mobileNo, emailID, password) VALUES (?,?,?,?,?)",
+      "INSERT INTO registeredusers (firstName, lastName, mobileNo, emailID, password) VALUES (?,?,?,?,?)",
       [user.fname, user.lname, user.mobileno, user.email, user.pswd],
       (err, result) => {
         if (err) {
