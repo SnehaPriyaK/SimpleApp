@@ -1,6 +1,4 @@
 # SimpleApp
-# Reference https://github.com/machadop1407/Simple-CRUD-React-Node-MySQL
-
 
 CREATE TABLE registeredusers (firstName VARCHAR(252), lastName VARCHAR(252), mobileNo INTEGER, emailID VARCHAR(252), password CHAR(60));
 use userdata;
